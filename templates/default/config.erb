@@ -1,0 +1,113 @@
+#!/bin/bash
+# WARNING: This file is managed via Opscode Chef. Any manual changes will be overridden on chef run.
+
+####################################################################
+# PREY Configuration File - by Tomas Pollak (bootlog.org)
+# URL: http://preyproject.com
+# License: GPLv3
+####################################################################
+
+# language, en (english) or es (espanol)
+lang='<%= @params[:prey][:lang] %>'
+
+# autoconnect feature, disabled by default until we are 200% sure it
+# works flawlessly in all platforms. feel free to try it out though.
+auto_connect='<%= @params[:prey][:auto_connect] %>'
+
+# verification URL, if left empty Prey will always activate and run,
+# which is certainly *not* recommended.
+check_url='<%= @params[:prey][:check_url] %>'
+
+# IMPORTANT: on what HTTP response code will Prey be activated (200 or 404)
+# control panel users don't touch this! standalone users may want to
+# change it back to 200 (previous setting), if you wish to wake Prey up by
+# creating the URL (as before) instead of removing an existing one
+missing_status_code='<%= @params[:prey][:missing_status_code] %>'
+
+# you can use send the report via email or to the web service
+# valid values: http, email, scp or sftp
+post_method='<%= @params[:prey][:post_method] %>'
+
+####################################################################
+# http posting configuration
+####################################################################
+
+# you can get both of these from Prey's web service
+api_key='<%= @params[:prey][:api_key] %>'
+device_key='<%= @params[:prey][:device_key] %>'
+
+####################################################################
+# SMTP settings, for email posting
+####################################################################
+
+# mailbox to send the report
+mail_to='<%= @params[:prey][:mail_to] %>'
+
+# the password is now stored base64 encrypted
+# if you wish to generate it by hand, run
+# $ echo -n "password" | openssl enc -base64
+smtp_server='<%= @params[:prey][:smtp_server] %>'
+smtp_username='<%= @params[:prey][:smtp_username] %>'
+smtp_password='<%= @params[:prey][:smtp_password] %>'
+
+# you dont need to change this
+mail_from='<%= @params[:prey][:mail_from] %>'
+mail_subject='<%= @params[:prey][:mail_subject] %>'
+
+####################################################################
+# additional http options
+####################################################################
+
+# if you're having trouble getting requests across your firewall or proxy,
+# you can try adding '-0' to make curl perform HTTP 1.0 requests
+curl_options='<%= @params[:prey][:curl_options] %>'
+
+# this option prepends a random number as a subdomain to the check URL on http mode
+# makes it harder for other programs to block Prey so its a good idea to be on
+randomize_check_host='<%= @params[:prey][:randomize_check_host] %>'
+
+# whether to send your device's LAN and gateway IP address as headers when
+# checking its status. currently only for testing purposes, but maybe in the
+# future it may prove useful. :)
+extended_headers='<%= @params[:prey][:extended_headers] %>'
+
+####################################################################
+# scp/sftp posting configuration -- EXPERIMENTAL!
+# we dont use user/pass but RSA keys
+####################################################################
+
+# this applies both to scp and sftp posting methods
+ssh_options='<%= @params[:prey][:ssh_options] %>'
+
+# remember you should have write access to the folder
+scp_user='<%= @params[:prey][:scp_user] %>'
+scp_server='<%= @params[:prey][:scp_server] %>'
+scp_path='<%= @params[:prey][:scp_path] %>'
+
+# same as above, make sure you have write access
+sftp_user='<%= @params[:prey][:sftp_user] %>'
+sftp_server='<%= @params[:prey][:sftp_server] %>'
+sftp_path='<%= @params[:prey][:sftp_path] %>'
+
+
+####################################################################
+# SSH Tunnel config
+# you can log in either by RSA key or entering the pass below
+####################################################################
+
+remote_tunnel_port='<%= @params[:prey][:remote_tunnel_port] %>'
+remote_tunnel_host='<%= @params[:prey][:remote_tunnel_host] %>'
+remote_tunnel_user='<%= @params[:prey][:remote_tunnel_user] %>'
+remote_tunnel_pass='<%= @params[:prey][:remote_tunnel_pass] %>'
+
+####################################################################
+# Amazon S3 keys
+####################################################################
+
+s3_access_key_id='<%= @params[:prey][:s3_access_key_id] %>'
+s3_secret_access_key='<%= @params[:prey][:s3_secret_access_key] %>'
+s3_bucket_name='<%= @params[:prey][:s3_bucket_name] %>'
+
+####################################################################
+# if you have any questions please visit preyproject.com
+####################################################################
