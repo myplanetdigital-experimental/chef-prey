@@ -33,10 +33,38 @@ when "linux"
         checksum "a51d1cc25a359a9d333c1f6731dc80c9"
         action :create_if_missing
       end
+
       package "prey" do
         source "#{Chef::Config[:file_cache_path]}/prey_0.5.3-ubuntu2_all.deb"
       end
+
+    # All other linux distros
     else
+      require_recipe "cron"
+      package "wget" do
+        action :install
+      end
+      package "curl" do
+        action :install
+      end
+      package "scrot" do
+        action :install
+      end
+      package "imagemagick" do
+        action :install
+      end
+      if node[:platform] === "fedora"
+        package "xawtv" do
+          action :install
+        end
+      else
+        package "streamer" do
+          action :install
+        end
+      end
+      package "perl" do
+        action :install
+      end
       remote_file "#{Chef::Config[:file_cache_path]}/prey-0.5.3-linux.zip" do
         source "http://preyproject.com/releases/0.5.3/prey-0.5.3-linux.zip"
         checksum "28192a8ccf5172d7ef011aec02acec8e"
@@ -53,6 +81,16 @@ when "linux"
         code <<-EOH
         tar -xvf prey-0.5.3-linux.zip -C /usr/share/prey
         EOH
+      end
+
+      template "/usr/share/prey/config" do
+        source "config.erb"
+        action :create
+      end
+
+      cron "crontab for prey check-in" do
+        minute "*/20"
+        command "/usr/share/prey/prey.sh > /var/log/prey.log"
       end
     end
   end
